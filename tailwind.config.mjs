@@ -11,7 +11,27 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        galindo: ['Galindo', 'sans-serif'],
+        rye: ['Rye', 'cursive'],
+        limelight: ['Limelight', 'serif'],
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities(
+        {
+          '.scrollbar-none': {
+            '-ms-overflow-style': 'none', /* Hide scrollbar for IE */
+            'scrollbar-width': 'none', /* Hide scrollbar for Firefox */
+          },
+          '.scrollbar-none::-webkit-scrollbar': {
+            display: 'none', /* Hide scrollbar for Webkit browsers */
+          },
+        },
+        ['responsive', 'hover']
+      );
+    },
+  ],
 };
