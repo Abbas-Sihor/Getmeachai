@@ -134,7 +134,7 @@ useEffect(()=>{
 		let a = await initiate(amount, username, paymentform ,contributor?.name);
 		let orderId = a.id;
 		var options = {
-			key_id: currentuser.razorpayid, // Enter the Key ID generated from the Dashboard
+			key: currentuser.razorpayid, // Enter the Key ID generated from the Dashboard
 			amount: amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
 			currency: "INR",
 			name: "Get Me A Chai", //your business name
