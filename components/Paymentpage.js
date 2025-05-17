@@ -70,6 +70,7 @@ useEffect(()=>{
 	};
 
 	const pay = async (amount) => {
+		console.log("initiate function called")
 		setsubmit(true);
 		if (contributor?.name?.length < 3 || paymentform.message?.length < 4) {
 			console.error("Validation failed: Name is too short");
@@ -133,8 +134,9 @@ useEffect(()=>{
 				
 		let a = await initiate(amount, username, paymentform ,contributor?.name);
 		let orderId = a.id;
+		console.log(orderId)
 		var options = {
-			key_id: currentuser.razorpayid, // Enter the Key ID generated from the Dashboard
+			key: currentuser.razorpayid, // Enter the Key ID generated from the Dashboard
 			amount: amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
 			currency: "INR",
 			name: "Get Me A Chai", //your business name

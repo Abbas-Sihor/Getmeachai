@@ -9,14 +9,16 @@ import Comment from "@/models/Comment";
 export const initiate = async (amount, to_username, paymentform,name) => {
 	await connectDb();
 	const user = await User.findOne({ username: to_username });
-
+	
 	// if(!user){
-	//   return console.error("User Does't exsist");
-	// }
-	var instance = new Razorpay({
-		key_id: user.razorpayid,
-		key_secret: user.razorpaysecret,
-	});
+		//   return console.error("User Does't exsist");
+		// }
+		console.log(user.razorpayid)
+		var instance = new Razorpay({
+			
+			key_id: user.razorpayid,
+			key_secret: user.razorpaysecret,
+		});
 
 	let options = {
 		amount: Number.parseInt(amount),
