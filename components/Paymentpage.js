@@ -184,9 +184,9 @@ useEffect(()=>{
 			<div className="info text-[#fffbe1] my-24 flex flex-col items-center justify-center gap-2">
 				<div className="name  font-bold text-2xl">@{username}</div>
 				<div className="tagline text-slate-400">{currentuser.tagline}.</div>
-				<div className="contribution text-slate-400">
+				{/* <div className="contribution text-slate-400">
 					15,632 members . 93 Posts . $16,490/release
-				</div>
+				</div> */}
 				<Link href={`/${username}/post`}>
 				<button
 						type="button"
