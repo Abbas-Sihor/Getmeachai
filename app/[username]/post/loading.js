@@ -17,10 +17,10 @@ export default function Loading({ username }) {
 	};
 
 	return (
-		<div className="flex h-screen">
+		<div className="md:flex xl:flex md:h-screen xl:h-screen sm:flex-row">
 			{/* Main Content */}
-			<div className="w-[75%] overflow-auto scrollbar-none">
-				<div className="grid grid-cols-2 gap-10 p-6">
+			<div className="w-full md:w-[75%] xl:w-[75%] overflow-auto scrollbar-none">
+				<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-10 p-6">
 					{/* <!-- Post 1 --> */}
 
 					{
@@ -74,7 +74,7 @@ export default function Loading({ username }) {
 				</div>
 			</div>
 			{/* Sidebar */}
-			<div className="flex h-screen w-[25%]">
+			<div className="w-full flex h-screen  md:w-[25%] xl:w-[25%]">
 				{/* Sidebar */}
 				<div className=" overflow-y-scroll bg-slate-900  flex flex-col gap-3 mt-5 mb-5 scrollbar-none w-[100%]">
 					{/* Profile Section */}
