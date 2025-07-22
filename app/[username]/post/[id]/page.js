@@ -71,6 +71,10 @@ const page = ({ params }) => {
 		}
 
 	const handlelike = async () => {
+		
+		if (!user){
+			return
+		}
 		await likepost(id, session?.user?.name);
 		
 			if (userlike) {
@@ -92,6 +96,9 @@ const page = ({ params }) => {
 	}
 	const handlefollow=async()=>{
 			console.log("i am here")
+			if(!user){
+				return
+			}
 			const follow = await followUser(username,session?.user?.name)
 			if(isfollowing){
 				setisfollowing(false)
@@ -182,7 +189,7 @@ const page = ({ params }) => {
 						<h3 className="text-white font-bold mb-3">Action</h3>
 						<ul className="space-y-2">
 							<Link href={`/${username}`} className="text-blue-500 underline">Support The Author</Link>
-							<p onClick={handlefollow} className="text-blue-500 underline cursor-pointer">
+							<p onClick={handlefollow} className={user?"text-blue-500 underline cursor-pointer":"cursor-not-allowed text-blue-500 underline"}>
 								{isfollowing ? "Unfollow" : "Follow"} The Author
 							</p>
 							<p className="text-slate-500">{followers} Followers</p>
@@ -191,7 +198,7 @@ const page = ({ params }) => {
 				</div>
 
 				{/* Comment Section */}
-				<div className="bg-gray-800 p-6 rounded-lg shadow-lg space-y-4">
+				{user ? <div className="bg-gray-800 p-6 rounded-lg shadow-lg space-y-4">
 					<h3 className="text-xl font-bold text-white">Comments</h3>
 					<div className="flex flex-col sm:flex-row gap-3 items-start sm:items-stretch">
 						<img src={user.profilepic || "/placeholder.png"} alt="User Avatar" className="w-10 h-10 rounded-full" />
@@ -221,7 +228,7 @@ const page = ({ params }) => {
 							<p className="text-lg text-white">No Comments...Type Something To Start A Conversation</p>
 						)}
 					</div>
-				</div>
+				</div>: <p className="text-white font-semibold">Login to add and view comment</p>}
 			</div>
 		</div>
 	</div>
