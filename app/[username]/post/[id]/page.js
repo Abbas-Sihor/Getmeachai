@@ -136,7 +136,7 @@ const page = ({ params }) => {
 				</h3>
 
 				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 p-4">
-					{recentpost?.length > 0 ? recentpost.map((post) => (
+					{recentpost?.length > 0 ? recentpost.slice(0,3).map((post) => (
 						<div className="post bg-gray-800 p-4 rounded-lg shadow-lg" key={post._id}>
 							<div>
 								<img className="w-full h-56 object-cover rounded-lg" src={post.thumbnail} alt="Thumbnail" />

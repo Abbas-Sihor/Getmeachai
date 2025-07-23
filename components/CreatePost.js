@@ -49,7 +49,18 @@ const [newtags,settaginput]=useState([])
     const inputtag=postdata.tags
     const modifiytag =inputtag.split(",").map(tag=>tag.trim()).filter(tag=>tag.length>0) 
       const post = await createpost(postdata,data._id,data.username,modifiytag);
-      console.log(post)
+      toast('Profile Updated Successfully', {
+              position: "top-right",
+              autoClose: 4000,
+              hideProgressBar: false,
+              closeOnClick: false,
+              pauseOnHover: false,
+              draggable: false,
+              progress: undefined,
+              theme: "dark",
+              transition: Bounce,
+              });
+              setPostdata({})
 
      
   };
@@ -116,7 +127,7 @@ const [newtags,settaginput]=useState([])
             name="tags"
             type="text"
             id="tags"
-            placeholder="Enter your Tags"
+            placeholder="Enter your Tags separated by comma "
             className="w-full mt-1 p-4 border border-gray-600 rounded-full bg-gray-900 text-gray-300 focus:ring focus:ring-blue-300 focus:border-blue-300"
           />
         </div>

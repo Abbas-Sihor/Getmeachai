@@ -101,9 +101,7 @@ const Navbar = () => {
                   ref={dropdownRef}
                   className="absolute top-16 right-6 bg-white text-black rounded-md shadow-md w-44"
                 >
-                  <div className="px-4 py-2 text-sm font-medium">
-                    {session.user.email}
-                  </div>
+                  
                   <Link
                     href="/dashboard"
                     onClick={closeDropdownOnClick}
