@@ -122,8 +122,11 @@ const page = ({ params }) => {
 					<p className="mt-2 text-slate-500">{post.updatedAt}</p>
 					<p className="mt-2 text-slate-500">~By <Link href={`/${username}/post`}><span className="font-bold underline">{post.username}</span></Link></p>
 					<div className="flex gap-4 mt-4">
-						<i className="text-blue-500 cursor-pointer" onClick={handlelike}>
+						<i className="relative group text-blue-500 cursor-pointer" onClick={handlelike}>
 							{likecount} {userlike ? <AiFillLike className="ml-1 inline" /> : <AiOutlineLike className="ml-1 inline" />}
+							<span className="absolute left-1/2 -translate-x-1/2 -top-8 hidden group-hover:block bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap">
+    {user ? "" : "Login to like"}
+  </span>
 						</i>
 						<i className="text-blue-500 cursor-pointer">
 							{commentcount} <FontAwesomeIcon icon={faComment} className="ml-1" />
@@ -178,9 +181,23 @@ const page = ({ params }) => {
 						)) : <p>No tags available</p>}
 					</div>
 					<div className="flex gap-4 mt-4">
-						<i className="text-blue-500 cursor-pointer" onClick={handlelike}>
-							{likecount} {userlike ? <AiFillLike className="ml-1 inline" /> : <AiOutlineLike className="ml-1 inline" />}
-						</i>
+						<i
+  className="relative text-blue-500 cursor-pointer group"
+  onClick={handlelike}
+>
+  {likecount}{" "}
+  {userlike ? (
+    <AiFillLike className="ml-1 inline" />
+  ) : (
+    <AiOutlineLike className="ml-1 inline" />
+  )}
+
+  {/* Tooltip */}
+  <span className="absolute left-1/2 -translate-x-1/2 -top-8 hidden group-hover:block bg-gray-800 text-white text-xs rounded px-2 py-1 whitespace-nowrap">
+    {user ? "" : "Login to like"}
+  </span>
+</i>
+
 						<i className="text-blue-500 cursor-pointer">
 							{commentcount} <FontAwesomeIcon icon={faComment} className="ml-1" />
 						</i>
