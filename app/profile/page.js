@@ -6,80 +6,9 @@ import { fetchpost, fetchUser, fetchUserPayments } from "@/actions/useraction";
 import { useSession } from "next-auth/react";
 import { underline } from "fontawesome";
 
-// const user = {
-//   name: "Abbas Sihorwala",
-//   profileImage: "https://img.freepik.com/free-icon/man_318-233556.jpg",
-//   posts: [
-//     {
-//       id: 1,
-//       title: "My First Post",
-//       description: "This is my first post on this platform.",
-//     },
-//     {
-//       id: 2,
-//       title: "Learning Next.js",
-//       description: "Next.js App Router is really powerful.",
-//     },
-//   ],
-//   following: [
-//     {
-//       id: 1,
-//       name: "John Doe",
-//       tagline: "Tech Writer & Blogger",
-//       image: "https://img.freepik.com/free-icon/man_318-233556.jpg",
-//     },
-//     {
-//       id: 2,
-//       name: "Sarah Smith",
-//       tagline: "Frontend Developer",
-//       image: "https://img.freepik.com/free-icon/man_318-233556.jpg",
-//     },
-//   ],
-//   contributions: [
-//     {
-//       id: 1,
-//       amount: 500,
-//       to: "John Doe",
-//       message: "Loved your article on React optimization!",
-//       image: "/author1.jpg",
-//     },
-//     {
-//       id: 2,
-//       amount: 250,
-//       to: "Sarah Smith",
-//       message: "Thanks for the helpful UI tips 🙌",
-//       image: "/author2.jpg",
-//     },
-//   ],
-// };
 
-const contributions = [
-    {
-      name: "Rahul Sharma",
-      amount: "₹500",
-      message: "Keep building amazing things!",
-      avatar: "/user1.jpg",
-    },
-    {
-      name: "Ayesha Khan",
-      amount: "₹1000",
-      message: "Proud to support your work 🚀",
-      avatar: "/user2.jpg",
-    },
-  ];
 
-  const followers = [
-    {
-      name: "Mohit Verma",
-      tagline: "Frontend Developer",
-      avatar: "/user3.jpg",
-    },
-    {
-      name: "Sara Ali",
-      tagline: "Tech Writer",
-      avatar: "/user4.jpg",
-    },
-  ];
+
 export default function ProfilePage() {
 	const { data: session } = useSession();
 	const [user, setUser] = useState({});

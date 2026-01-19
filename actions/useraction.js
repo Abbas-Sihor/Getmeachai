@@ -303,7 +303,7 @@ export const fetchTreandingAuthor=async(userusername)=>{
 		const user = await User.findOne({username:userusername})
 	   if(!user) return
 		 const authorfollowing =   user.following 
-		 console.log(authorfollowing)
+		 
 		 const treandingAuthors= await User.find({username:{$nin:authorfollowing}}).sort({followers:-1}).limit(5).lean()
 		
 		 return treandingAuthors.map((author) => ({

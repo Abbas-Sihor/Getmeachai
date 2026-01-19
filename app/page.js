@@ -27,7 +27,9 @@ export default function Home() {
 
         <div className="flex gap-4 mt-8">
           <button className="px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600">
+            <Link href={"/login"}>
             Explore Creators
+          </Link>
           </button>
           <button className="px-6 py-3 rounded-xl border border-gray-700">
             <Link href={"/login"}>

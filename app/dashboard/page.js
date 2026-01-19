@@ -50,7 +50,7 @@ const Page = () => {
         theme: "dark",
         transition: Bounce,
         });
-        router.push(`/${data.username}`)
+        router.push("/home")
     } catch (err) {
       console.error("Error updating user data:", err);
     }
