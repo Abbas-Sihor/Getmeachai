@@ -5,10 +5,12 @@ import { fetchUser, updateUserData } from "@/actions/useraction";
 import { ToastContainer, toast,Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { createpost } from "@/actions/useraction";
+import { useRouter } from "next/navigation";
 
 const CreatePost = () => {
   const { data: session } = useSession();
   const [data, updateData] = useState({});
+  const router = useRouter()
   const [postdata, setPostdata] = useState({
   title: "",
   description: "",
@@ -22,7 +24,7 @@ const [newtags,settaginput]=useState([])
 
  
   useEffect(() => {
-    document.title="Dashboard - Manage Your Profile | GetMeAChai"
+    document.title="Dashboard - Manage Your Profile | Patronick"
     
     
       GetData();
@@ -46,145 +48,183 @@ const [newtags,settaginput]=useState([])
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent page reload
     const inputtag=postdata.tags
     const modifiytag =inputtag.split(",").map(tag=>tag.trim()).filter(tag=>tag.length>0) 
       const post = await createpost(postdata,data._id,data.username,modifiytag);
-      toast('Profile Updated Successfully', {
-              position: "top-right",
-              autoClose: 4000,
-              hideProgressBar: false,
-              closeOnClick: false,
-              pauseOnHover: false,
-              draggable: false,
-              progress: undefined,
-              theme: "dark",
-              transition: Bounce,
-              });
-              setPostdata({})
+      if(post){
+
+        toast('Profile Updated Successfully', {
+                position: "top-right",
+                autoClose: 4000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+                });
+                setPostdata({})
+                router.push(`/${data.username}/post/${post._id}`)
+      }
+      else{
+        alert("ERROR,Something Went Wrong\n Note All Fields Are Require Except Tags")
+      }
 
      
   };
 
+  const handleImageUpload = async (e, folderName, dbName) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  if (file.size > 10 * 1024 * 1024) {
+    alert("Image size should be less than 5MB");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", folderName);
+
+  try {
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dyuc6dgxa/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const result = await res.json();
+
+    setPostdata((prev) => ({
+      ...prev,
+      [dbName]: result.secure_url, // ✅ THIS IS THE KEY FIX
+    }));
+  } catch (err) {
+    console.error(err);
+    alert("Image upload failed");
+  }
+};
+
+
   return (
     <>
     <ToastContainer/>
-    <form className="max-w-2xl mx-auto" action={handleSubmit}>
-      <div className="max-w-2xl mx-auto p-6 text-white rounded-full shadow-md">
-        <h2 className="text-2xl font-semibold mb-4">Create A Post</h2>
+    <form onSubmit={handleSubmit} className="max-w-3xl mx-auto px-4">
+  <div className="bg-[#0f172a] border border-gray-800 rounded-2xl p-8 space-y-8">
 
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium">
-            Title
-          </label>
-          <input
-            value={postdata.title || ""}
-            onChange={handleChange}
-            name="title"
-            type="text"
-            id="title"
-            placeholder="Enter The Title Of Your Post "
-            className="w-full mt-1 p-4 border border-gray-600 rounded-full bg-gray-900 text-gray-300 focus:ring focus:ring-blue-300 focus:border-blue-300"
+    <h2 className="text-3xl font-semibold tracking-tight">
+      Create Post
+    </h2>
+
+    {/* Title */}
+    <div>
+      <label className="text-sm text-gray-400">Title</label>
+      <input
+        name="title"
+        value={postdata.title}
+        onChange={handleChange}
+        placeholder="Post title"
+        className="mt-2 w-full bg-transparent border border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+      />
+    </div>
+
+    {/* Description */}
+    <div>
+      <label className="text-sm text-gray-400">Short Description</label>
+      <textarea
+        name="description"
+        value={postdata.description}
+        onChange={handleChange}
+        rows={3}
+        placeholder="Brief description of your post"
+        className="mt-2 w-full bg-transparent border border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+      />
+    </div>
+
+    {/* Tags */}
+    <div>
+      <label className="text-sm text-gray-400">Tags</label>
+      <input
+        name="tags"
+        value={postdata.tags}
+        onChange={handleChange}
+        placeholder="react, nextjs, webdev"
+        className="mt-2 w-full bg-transparent border border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+      />
+      <p className="text-xs text-gray-500 mt-1">
+        Separate tags using commas
+      </p>
+    </div>
+
+    {/* Image URLs */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div>
+        <label className="text-sm text-gray-400">Thumbnail URL</label>
+        <input
+          name="thumbnail"
+          onChange={(e) => handleImageUpload(e, "thumbnail_upload", "thumbnail")}
+          id="thumbnail"
+         type="file"
+         accept="image*"
+          placeholder="https://..."
+          className="mt-2 w-full bg-transparent border border-gray-700 rounded-xl px-4 py-3"
+        />
+        {postdata.thumbnail && (
+          <img
+            src={postdata.thumbnail}
+            className="mt-3 h-32 w-full object-cover rounded-xl border border-gray-700"
           />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium">
-            Description
-          </label>
-          <textarea
-            value={postdata.description || ""}
-            onChange={handleChange}
-            name="description"
-            type="text"
-            id="description"
-            placeholder="Enter The Description Of Your Post"
-            className="w-full mt-1 p-4 border border-gray-600 rounded-lg bg-gray-900 text-gray-300 focus:ring focus:ring-blue-500 focus:border-blue-500 scrollbar-none"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="username" className="block text-sm font-medium">
-            Username
-          </label>
-          <input
-            value={data.username || ""}
-            readOnly
-            name="username"
-            type="text"
-            id="username"
-            placeholder="Enter your username"
-            className="w-full mt-1 p-4 border border-gray-600 rounded-full bg-gray-900 text-gray-300 focus:ring focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-sm font-medium">
-            Tags
-          </label>
-          <input
-            value={postdata.tags || ""}
-            onChange={handleChange}
-            name="tags"
-            type="text"
-            id="tags"
-            placeholder="Enter your Tags separated by comma "
-            className="w-full mt-1 p-4 border border-gray-600 rounded-full bg-gray-900 text-gray-300 focus:ring focus:ring-blue-300 focus:border-blue-300"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="cover-picture" className="block text-sm font-medium">
-            Thumbnail
-          </label>
-          <input
-            value={postdata.thumbnail || ""}
-            onChange={handleChange}
-            name="thumbnail"
-            type="text"
-            id="thumbnail"
-            placeholder="Enter the Thumbnail link"
-            className="w-full mt-1 p-4 border border-gray-600 rounded-full bg-gray-900 text-gray-300 focus:ring focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="profile-picture" className="block text-sm font-medium">
-            Cover Picture
-          </label>
-          <input
-            value={postdata.coverpic || ""}
-            onChange={handleChange}
-            name="coverpic"
-            type="text"
-            id="coverpic"
-            placeholder="Enter the Cover Picture link"
-            className="w-full mt-1 p-4 border border-gray-600 rounded-full bg-gray-900 text-gray-300 focus:ring focus:ring-blue-500 focus:border-blue-500"
-          />
-        </div>
-
-        <div className="mb-4 ">
-          <label htmlFor="razorpay-id" className="block text-sm font-medium">
-            Main Context
-          </label>
-          <textarea
-            value={postdata.maincontext || ""}
-            onChange={handleChange}
-            name="maincontext"
-            type="text"
-            id="maincontext"
-            placeholder="Enter your Main Context"
-            className="w-full mt-1 p-4 border border-gray-600 rounded-lg bg-gray-900 text-gray-300 focus:ring focus:ring-blue-500 focus:border-blue-500 scrollbar-none"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-full hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-500"
-        >
-          Save
-        </button>
+        )}
       </div>
-    </form>
+
+      <div>
+        <label className="text-sm text-gray-400">Cover Image URL</label>
+        <input
+          name="coverpic"
+           type="file"
+         accept="image*"
+         id="coverpic"
+          onChange={(e) => handleImageUpload(e, "postCover_upload", "coverpic")}
+          placeholder="https://..."
+          className="mt-2 w-full bg-transparent border border-gray-700 rounded-xl px-4 py-3"
+        />
+        {postdata.coverpic && (
+          <img
+            src={postdata.coverpic}
+            className="mt-3 h-32 w-full object-cover rounded-xl border border-gray-700"
+          />
+        )}
+      </div>
+    </div>
+
+    {/* Main Content */}
+    <div>
+      <label className="text-sm text-gray-400">Main Content</label>
+      <textarea
+        name="maincontext"
+        value={postdata.maincontext}
+        onChange={handleChange}
+        rows={6}
+        placeholder="Write your post content here..."
+        className="mt-2 w-full bg-transparent border border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500 outline-none"
+      />
+    </div>
+
+    {/* Submit */}
+    <button
+      type="submit"
+      className="w-full bg-blue-600 hover:bg-blue-700 transition py-3 rounded-xl font-semibold"
+    >
+      Publish Post
+    </button>
+
+  </div>
+</form>
+
     </>
   );
 };

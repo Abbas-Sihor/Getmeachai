@@ -35,14 +35,14 @@ const page = ({ params }) => {
 	const getdata = async () => {
 		let data = await fetchUser(username);
 		setAuthor(data);
-		setfollowers(data.followers)
+		setfollowers(data?.followers)
 		let userdata = await fetchUser(session?.user?.name);
 		setUser(userdata);
 		let postdata = await findpost(id);
 		setpost(postdata);
-		setlikecount(postdata.likecount);
+		setlikecount(postdata?.likecount);
 		let commentdata = await fetchComments(id);
-		setcommentcount(commentdata.length)
+		setcommentcount(commentdata?.length)
 		setcomment(commentdata);
 		let recentpostdata = await fetchrecenthpost(username,id)
 		console.log(recentpostdata)
@@ -50,7 +50,7 @@ const page = ({ params }) => {
 
 		//check if the user has already liked the post or not
 		try {
-			if (postdata.likeby.includes(session?.user?.name)) {
+			if (postdata?.likeby.includes(session?.user?.name)) {
 				setuserlike(true);
 			}
 		} catch (error) {

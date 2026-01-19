@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import SessionWrapper from "@/components/SessionWrapper";
 import { config } from '@fortawesome/fontawesome-svg-core';
 import '@fortawesome/fontawesome-svg-core/styles.css';
+import Starfield from "@/components/Starfield";
 config.autoAddCss = false;
 
 const geistSans = Geist({
@@ -17,9 +18,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 export const metadata = {
-	title: "GetMeAChai - Empowering Developers, Raising Funds",
+	title: "Patronick - Empowering Developers, Raising Funds",
 	description:
-		"Join GetMeAChai today to raise funds for your projects. Empower your development journey and turn your ideas into reality with ease and trust.",
+		"Join Patronick today to raise funds for your projects. Empower your development journey and turn your ideas into reality with ease and trust.",
 };
 
 export default function RootLayout({ children }) {
@@ -29,6 +30,7 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiase`}>
           <SessionWrapper> 
           <Navbar />
+          <Starfield/>
           <div className="min-h-[82.5vh]  bg-slate-950 bg-[linear-gradient(to_right,#4f4f4f2e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f2e_1px,transparent_1px)] bg-[size:14px_24px]">
             {children}
             </div>

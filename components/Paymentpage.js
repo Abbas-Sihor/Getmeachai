@@ -8,7 +8,7 @@ import { ToastContainer, toast,Bounce,Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { user } from "fontawesome";
+
 const Paymentpage = ({ username }) => {
     const router = useRouter();
 		 const { data: session } = useSession();
@@ -43,13 +43,14 @@ useEffect(()=>{
 			.join(" "); // Join the words back into a single string
 	}
 
-	const [contributor, setcontributor] = useState({name:"",email:"",contact:""});
+	const [contributor, setcontributor] = useState({name:"",email:"",contact:"",_id:""});
 	const [paymentform, setPaymentform] = useState({
 		name:"" ,
 		message: "",
 		amount: "",
 	});
 	const [currentuser, setCurrentuser] = useState({});
+	const [by,setBy]=useState("createdAt")
 	const [payments, setPayments] = useState({});
 	const [issubmitted, setsubmit] = useState(false);
 
@@ -63,11 +64,16 @@ useEffect(()=>{
 	const getData = async () => {
 		let user = await fetchUser(username);
 		setCurrentuser(user);
-		let x = await fetchPayment(username);
-		setPayments(x);
 		let dataofcontributor = await fetchUser(session?.user?.name)
 		setcontributor(dataofcontributor)
 	};
+	useEffect(()=>{
+		const getPaymentData = async()=>{
+			let x = await fetchPayment(username,by);
+		setPayments(x);
+		}
+		getPaymentData()
+	},[username,by])
 
 	const pay = async (amount) => {
 		console.log("initiate function called")
@@ -132,14 +138,14 @@ useEffect(()=>{
 					
 				}
 				
-		let a = await initiate(amount, username, paymentform ,contributor?.name);
+		let a = await initiate(amount, username, paymentform ,contributor?.name,contributor?._id);
 		let orderId = a.id;
 		console.log(orderId)
 		var options = {
 			key: currentuser.razorpayid, // Enter the Key ID generated from the Dashboard
 			amount: amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
 			currency: "INR",
-			name: "Get Me A Chai", //your business name
+			name: "Patronick", //your business name
 			description: "Test Transaction",
 			image: "https://example.com/your_logo",
 			order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
@@ -199,6 +205,11 @@ useEffect(()=>{
 			<div className="flex flex-col md:flex-row w-[80%] p-5 gap-4 mx-auto">
 				<div className="payment text-[#fffbe1] p-5 bg-slate-900 rounded-[50px] w-full md:w-1/2">
 					<h2 className="font-bold text-center p-5 text-2xl">Supporters</h2>
+					<div className="flex justify-center flex-row gap-10">
+					<p className={`font-bold text-center text-lg cursor-pointer ${by=="createdAt"?"underline":""}`} onClick={()=>setBy("createdAt")}>Newest</p>
+					 <p className={`font-bold text-center text-lg cursor-pointer ${by=="amount"?"underline":""}`} onClick={()=>setBy("amount")}>Highest</p>
+
+					</div>
 					<ul>
 						{payments && payments.length > 0 ? (
 							payments.map((p, i) => (
@@ -241,7 +252,7 @@ useEffect(()=>{
 							type="text"
 							name="name"
 							readOnly
-							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
 							placeholder="Enter your name"
 						/>
 						<span
@@ -266,7 +277,7 @@ useEffect(()=>{
 							id="message"
 							name="message"
 							onChange={handlechange}
-							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
 							placeholder="Enter your message"
 							rows="3"
 						></textarea>
@@ -295,7 +306,7 @@ useEffect(()=>{
 							type="number"
 							name="amount"
 							onChange={handlechange}
-							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+							className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
 							placeholder="Enter amount"
 						/>
 						<span
@@ -323,7 +334,7 @@ useEffect(()=>{
 					{/* Quick Pay Buttons */}
 					<div className="mt-6 text-center">
 						<p className="text-gray-700 font-medium mb-2">Quick Pay:</p>
-						<div className="flex flex-col md:flex-row justify-center gap-3">
+						<div className="flex flex-col md:flex-row justify-center gap-3 text-black">
 							{[ 20, 25, 30].map((amount) => (
 								<button
 									onClick={() => pay(amount * 100)}

@@ -12,7 +12,7 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    document.title="Dashboard - Manage Your Profile | GetMeAChai"
+    document.title="Dashboard - Manage Your Profile | Patronick"
     if (!session) {
       router.push("/"); // Redirect to home if no session
     } else {
@@ -35,8 +35,8 @@ const Page = () => {
   };
 
   const handleSubmit = async (e) => {
+     e.preventDefault(); // Prevent page reload
     try {
-      console.log(data)
       const user = await updateUserData(data._id, data); // Pass `data` to update
       
       toast('Profile Updated Successfully', {
@@ -50,15 +50,54 @@ const Page = () => {
         theme: "dark",
         transition: Bounce,
         });
+        router.push(`/${data.username}`)
     } catch (err) {
       console.error("Error updating user data:", err);
     }
   };
 
+  const handleImageUpload = async (e,folderName,dbName) => {
+    e.preventDefault()
+  const file = e.target.files[0];
+  if (!file) return;
+
+  // Optional validation
+  if (file.size > 5 * 1024 * 1024) {
+    alert("Image size should be less than 5MB");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", folderName); // preset name
+
+  try {
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dyuc6dgxa/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await res.json();
+    console.log("Here is the data",data)
+
+    updateData((prev) => ({
+      ...prev,
+      [dbName]: data.secure_url, // ✅ save URL
+    }));
+  } catch (err) {
+    console.error(err);
+    alert("Image upload failed");
+  }
+};
+
+
   return (
     <>
     <ToastContainer/>
-    <form className="max-w-2xl mx-auto" action={handleSubmit}>
+    <form className="max-w-2xl mx-auto" onSubmit={handleSubmit}>
       <div className="max-w-2xl mx-auto p-6 text-white rounded-full shadow-md">
         <h2 className="text-2xl font-semibold mb-4">Profile Setup</h2>
 
@@ -140,11 +179,19 @@ const Page = () => {
           <label htmlFor="cover-picture" className="block text-sm font-medium">
             Cover Picture
           </label>
+          {data.coverpic && (
+    <img
+      src={data.coverpic}
+      alt="Cover Preview"
+      className="w-full h-40 object-cover rounded-xl mb-3 border border-gray-700"
+    />
+  )}
           <input
-            value={data.coverpic || ""}
-            onChange={handleChange}
+            type="file"
+  accept="image/*"
+  onChange={(e)=>handleImageUpload(e,"cover_upload",'coverpic')}
             name="coverpic"
-            type="text"
+            
             id="coverpic"
             placeholder="Enter the cover pic link"
             className="w-full mt-1 p-4 border border-gray-600 rounded-full bg-gray-900 text-gray-300 focus:ring focus:ring-blue-500 focus:border-blue-500"
@@ -155,11 +202,19 @@ const Page = () => {
           <label htmlFor="profile-picture" className="block text-sm font-medium">
             Profile Picture
           </label>
+          {data.profilepic && (
+    <img
+      src={data.profilepic}
+      alt="Profile Preview"
+      className="w-32 h-32 object-cover rounded-full mb-3 border border-gray-700"
+    />
+  )}
           <input
-            value={data.profilepic || ""}
-            onChange={handleChange}
+            
+              type="file"
+  accept="image/*"
+  onChange={(e)=>handleImageUpload(e,"profile_upload","profilepic")}
             name="profilepic"
-            type="text"
             id="profilepic"
             placeholder="Enter the profile pic link"
             className="w-full mt-1 p-4 border border-gray-600 rounded-full bg-gray-900 text-gray-300 focus:ring focus:ring-blue-500 focus:border-blue-500"

@@ -6,7 +6,7 @@ import User from "@/models/User";
 import Post from "@/models/Post";
 import Comment from "@/models/Comment";
 
-export const initiate = async (amount, to_username, paymentform,name) => {
+export const initiate = async (amount, to_username, paymentform,name ,who) => {
 	await connectDb();
 	const user = await User.findOne({ username: to_username });
 	
@@ -28,6 +28,7 @@ export const initiate = async (amount, to_username, paymentform,name) => {
 	let x = await instance.orders.create(options);
 
 	await Payment.create({
+		who:who,
 		oid: x.id,
 		amount: amount / 100,
 		to_user: to_username,
@@ -51,15 +52,29 @@ export const fetchUser = async (username) => {
   }
 };
 
-export const fetchPayment = async (username) => {
+export const fetchPayment = async (username,by) => {
 	await connectDb();
-	const payments = await Payment.find({ to_user: username, done: "true" })
-		.sort({ amount: -1 })
+	const payments = await Payment.find({ to_user: username, done: true })
+		.sort({ [by]: -1 })
 		.limit(10)
 		.lean(); // Fetch as plain objects
 	payments.forEach((payment) => {
 		if (payment._id) payment._id = payment._id.toString(); // Convert _id to string
 	});
+	return payments;
+};
+export const fetchUserPayments = async (who ,id) => {
+	await connectDb();
+	const payments = await Payment.find({ [who]: id, done: true })
+	  .populate({path:"who",
+			select:" username profilepic"
+		})
+		.sort({ createdAt: -1 })
+		.lean(); // Fetch as plain objects
+	payments.forEach((payment) => {
+		if (payment._id) payment._id = payment._id.toString(); // Convert _id to string
+	});
+	
 	return payments;
 };
 
@@ -214,26 +229,151 @@ export const fetchrecenthpost = async (username,currentpostid) => {
 
 
 export const followUser=async(authorusername, userusername)=>{
-	console.log("i am executing")
 	await connectDb()
+
 	try {
 		const author = await User.findOne({username:authorusername})
-		console.log(author)
-		if(author.followby.includes(userusername)){
-			author.followby=author.followby.filter((username)=>username!==userusername)
-			author.followers-=1
-			await author.save()
-			console.log("done followers updated")
-		}
+		if(!author) return
+
+		const isFollowing= author.followby.includes(userusername)
+
+		if(isFollowing){
+			// Unfollow
+
+			await User.updateOne({username:authorusername},{
+				$pull:{followby:userusername},
+				$inc:{followers:-1}
+			})
+		
+		await User.updateOne({username:userusername},{
+			$pull:{following:authorusername}
+		})
+	}
 		else{
-			author.followby.push(userusername)
-			author.followers+=1
-			await author.save()
-			console.log("done followers updated")
+			await User.updateOne({username:authorusername},{
+				$addToSet:{followby:userusername},
+				$inc:{followers:+1}
+			})
+			await User.updateOne({username:userusername},{
+				$addToSet:{following:authorusername},
+				
+			})
+
 		}
-	} catch (error) {
+		} catch (error) {
 		console.log("Internal error occured",error)
 	}
 
 } 
 
+export const fetchPostFromFollowedAuthors=async(userusername)=>{
+	await connectDb()
+
+	try {
+		const user = await User.findOne({username:userusername})
+	   if(!user) return
+		 const authorfollowing = user.following
+		 if (!user.following || authorfollowing.length === 0) {
+			return await fetchTrendingPosts()
+}
+		
+		 const posts =  await Post.find({username : {$in :authorfollowing}}).sort({createdAt:-1}).limit(7).populate({
+    path: "author",
+    select: "username profilepic", 
+  }).lean()
+		 const leanPost= posts.map((post) => ({
+		...post,
+		_id: post._id.toString(), // Convert MongoDB ObjectId to string
+		
+		createdAt: post.createdAt?.toISOString(), // Convert Date to ISO string
+		updatedAt: post.updatedAt?.toISOString(), // Convert Date to ISO string
+	}));
+	return ({message:false, posts:leanPost})
+	} catch (error) {
+		console.log("Internal error occured",error)
+	}
+
+
+}
+
+export const fetchTreandingAuthor=async(userusername)=>{
+
+	await connectDb()
+	try {
+		const user = await User.findOne({username:userusername})
+	   if(!user) return
+		 const authorfollowing =   user.following 
+		 console.log(authorfollowing)
+		 const treandingAuthors= await User.find({username:{$nin:authorfollowing}}).sort({followers:-1}).limit(5).lean()
+		
+		 return treandingAuthors.map((author) => ({
+		...author,
+		_id: author._id.toString(), // Convert MongoDB ObjectId to string
+		createdAt: author.createdAt?.toISOString(), // Convert Date to ISO string
+		updatedAt: author.updatedAt?.toISOString(), // Convert Date to ISO string
+	}));
+	} catch (error) {
+		console.log("Internal error occured",error)
+	}
+
+}
+
+export const fetchTrendingPosts = async () => {
+  await connectDb();
+
+  try {
+    const posts = await Post.find()
+      .sort({ likecount: -1, createdAt: -1 }) // trending + recent
+      .limit(7)
+      .populate({
+        path: "author",
+        select: "username profilepic",
+      })
+      .lean();
+
+    const leanPost= posts.map((post) => ({
+      ...post,
+      _id: post._id.toString(),
+      createdAt: post.createdAt?.toISOString(),
+      updatedAt: post.updatedAt?.toISOString(),
+    }));
+		return({message:true,posts:leanPost})
+  } catch (error) {
+    console.log("Internal error occurred", error);
+  }
+};
+
+
+export const fetchOtherPostFromNotFollowingAuthors = async (userusername) => {
+  await connectDb();
+
+  try {
+    const user = await User.findOne({ username: userusername });
+    if (!user) return [];
+
+    const following = user.following || [];
+
+    const posts = await Post.find({
+      username: {
+        $nin: [...following, userusername],
+      },
+    })
+      .sort({ createdAt: -1 }) // recent posts
+      .limit(7)
+      .populate({
+        path: "author",
+        select: "username profilepic",
+      })
+      .lean();
+
+    return posts.map((post) => ({
+      ...post,
+      _id: post._id.toString(),
+      createdAt: post.createdAt?.toISOString(),
+      updatedAt: post.updatedAt?.toISOString(),
+    }));
+  } catch (error) {
+    console.log("Internal error occurred", error);
+    return [];
+  }
+};

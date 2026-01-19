@@ -1,8 +1,13 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
+import User from "./User";
 
 const PaymentSchema = new Schema(
 	{
+		who:{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "User",
+		},
 		name: { type: String, required: true },
 		to_user: { type: String, required: true },
 		oid: { type: String, required: true },

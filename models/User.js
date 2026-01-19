@@ -14,6 +14,12 @@ const UserSchema = new Schema(
 				ref: "User",
 			},
 		],
+		following: [
+			{
+				type:String,
+				ref: "User",
+			},
+		],
 		tagline: { type: String},
 		coverpic: { type: String,  },
 		profilepic: { type: String,  },
