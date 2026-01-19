@@ -58,7 +58,7 @@ export default function Navbar() {
 			<div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 				<div className="flex items-center gap-2 font-semibold">
 					<div className="w-8 h-8 bg-indigo-600 rounded-full" />
-					<Link href={"/"}>Patronick</Link>
+					<Link href={"/"}>Patronic</Link>
 				</div>
 
 				<div className="hidden md:flex gap-8 text-sm text-gray-300">

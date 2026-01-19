@@ -18,7 +18,7 @@ export default function Home() {
       <section className="max-w-7xl mx-auto px-6 py-16">
         {/* HERO */}
         <h1 className="text-7xl font-bold tracking-tight text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.8)]">
-          Patronick
+          Patronic
         </h1>
 
         <p className="text-gray-400 mt-4 max-w-xl text-[20px]">
@@ -45,7 +45,7 @@ export default function Home() {
   );
 }
 // export const metadata = {
-//   title: "Patronick - Empowering Developers, Raising Funds",
+//   title: "Patronic - Empowering Developers, Raising Funds",
 //   description:
-//     "Join Patronick today to raise funds for your projects. Empower your development journey and turn your ideas into reality with ease and trust.",
+//     "Join Patronic today to raise funds for your projects. Empower your development journey and turn your ideas into reality with ease and trust.",
 // }

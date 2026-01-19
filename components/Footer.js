@@ -4,7 +4,7 @@ const Footer = () => {
   const currentyear = new Date().getFullYear()
   return (
     <div className='text-white justify-between p-6 bg-[#0a0e31] z-50'>
-     <p className='text-center'>Copyright &copy; {currentyear} Patronick - All rights reserved!</p>
+     <p className='text-center'>Copyright &copy; {currentyear} Patronic - All rights reserved!</p>
     </div>
   )
 }

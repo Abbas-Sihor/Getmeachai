@@ -21,8 +21,8 @@ export default async function Page({ params }) {
 export async function generateMetadata({params}) {
   const { username } = await params;
   return{
-    title:`${username} - Support ${username}’s Project | Patronick`,
-    description:`Support ${username}’s development project by contributing funds. Track their progress and help turn their ideas into reality on Patronick.`
+    title:`${username} - Support ${username}’s Project | Patronic`,
+    description:`Support ${username}’s development project by contributing funds. Track their progress and help turn their ideas into reality on Patronic.`
   }
 }
 

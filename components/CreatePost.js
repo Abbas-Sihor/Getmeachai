@@ -24,7 +24,7 @@ const [newtags,settaginput]=useState([])
 
  
   useEffect(() => {
-    document.title="Dashboard - Manage Your Profile | Patronick"
+    document.title="Dashboard - Manage Your Profile | Patronic"
     
     
       GetData();

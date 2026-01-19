@@ -18,9 +18,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 export const metadata = {
-	title: "Patronick - Empowering Developers, Raising Funds",
+	title: "Patronic - Empowering Developers, Raising Funds",
 	description:
-		"Join Patronick today to raise funds for your projects. Empower your development journey and turn your ideas into reality with ease and trust.",
+		"Join Patronic today to raise funds for your projects. Empower your development journey and turn your ideas into reality with ease and trust.",
 };
 
 export default function RootLayout({ children }) {

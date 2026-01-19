@@ -4,7 +4,7 @@ const page = () => {
   return (
     <div className=" min-h-screen flex flex-col items-center">
       <header className=" text-white w-full py-6 text-center shadow-md">
-        <h1 className="text-4xl font-bold">About Patronick</h1>
+        <h1 className="text-4xl font-bold">About Patronic</h1>
         <p className="mt-2 text-lg">Empowering Developers, Building Trust</p>
       </header>
 
@@ -12,9 +12,9 @@ const page = () => {
         <section className="bg-white p-8 shadow-md rounded-md mb-10">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Our Mission</h2>
           <p className="text-gray-600 leading-7">
-            At <span className="text-green-500 font-semibold">Patronick</span>, we are on a mission to support creators, developers, and innovators. 
+            At <span className="text-green-500 font-semibold">Patronic</span>, we are on a mission to support creators, developers, and innovators. 
             Our platform allows developers to raise funds for their projects, ideas, or side hustles—one “chai” at a time. Whether you're building your 
-            next big thing or polishing your existing projects, Patronick is here to help turn your vision into reality.
+            next big thing or polishing your existing projects, Patronic is here to help turn your vision into reality.
           </p>
         </section>
 
@@ -52,7 +52,7 @@ const page = () => {
           <h2 className="text-2xl font-bold mb-4">Your Trust, Our Commitment</h2>
           <p className="leading-7">
             We understand how important trust is when it comes to fundraising. That's why we are committed to maintaining the highest standards of 
-            security and reliability. With <span className="font-semibold">Patronick</span>, you can focus on creating while we handle the rest.
+            security and reliability. With <span className="font-semibold">Patronic</span>, you can focus on creating while we handle the rest.
           </p>
         </section>
       </main>
@@ -64,7 +64,7 @@ const page = () => {
 export default page
 
 export const metadata = {
-  title: "About Us - Patronick | Empowering Developers & Building Trust",
-  description: "Learn more about Patronick's mission to help developers raise funds for their projects. Discover why we're the trusted platform for creators and how we ensure a secure, community-driven experience.",
+  title: "About Us - Patronic | Empowering Developers & Building Trust",
+  description: "Learn more about Patronic's mission to help developers raise funds for their projects. Discover why we're the trusted platform for creators and how we ensure a secure, community-driven experience.",
 };
 

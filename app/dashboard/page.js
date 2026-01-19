@@ -12,7 +12,7 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    document.title="Dashboard - Manage Your Profile | Patronick"
+    document.title="Dashboard - Manage Your Profile | Patronic"
     if (!session) {
       router.push("/"); // Redirect to home if no session
     } else {

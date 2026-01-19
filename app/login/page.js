@@ -6,7 +6,7 @@
 // 	const { data: session } = useSession();
 // 	const router = useRouter();  // Get the router
 //   useEffect(() => {
-// 		document.title="Login - Patronick"
+// 		document.title="Login - Patronic"
 //     if (session) {
 //       // Redirect to dashboard if session exists
 //       router.push("/dashboard");
@@ -137,7 +137,7 @@ export default function Page() {
 	const { data: session } = useSession();
 	const router = useRouter();  // Get the router
   useEffect(() => {
-		document.title="Login - Patronick"
+		document.title="Login - Patronic"
     if (session) {
       // Redirect to dashboard if session exists
       router.push("/dashboard");
@@ -196,7 +196,7 @@ export default function Page() {
             </p>
 
             <span className="mt-4 block text-sm text-white/70">
-              — The Patronick Promise
+              — The Patronic Promise
             </span>
 
             {/* Quote Marks */}
