@@ -172,7 +172,7 @@ const page = ({ params }) => {
 							<img src={author.profilepic || "placeholder.png"} alt="Author Avatar" className="w-8 h-8 rounded-full" />
 							<Link href={`/${username}/post`}><span>By {post.username}</span></Link>
 						</div>
-						<span>{post.updatedAt}</span>
+						<span>{post.createdAt}</span>
 					</div>
 					<p className="text-white">{post.description}</p>
 					<div className="flex flex-wrap gap-2">
